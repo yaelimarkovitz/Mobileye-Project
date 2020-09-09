@@ -50,6 +50,7 @@ def crop_image(path, x, y):
     im = Image.open(path)
     im = im.crop((x, y, x + 81, y + 81))
     croped_image = np.asarray(im, dtype='uint8')
+    # print("start" + str(croped_image.shape) + "end")
     return croped_image
 
 

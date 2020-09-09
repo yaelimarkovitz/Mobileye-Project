@@ -72,9 +72,12 @@ def find_tfl_lights(c_image: np.ndarray, **kwargs):
          [-0.5, -0.5, -0.5], ])
     x_green, y_green = find_lights(c_image[:, :, 1], kernel_g, c_image)
     x_red, y_red = find_lights(c_image[:, :, 0], kernel_r, c_image)
-    plt.figure(None).clf()
-    plt.imshow(c_image)
-    return x_red, y_red, x_green, y_green
+    candidates = [[x,y] for x,y in zip(x_red,y_red)]
+    auxiliary = [1]*len(x_red)
+    candidates += [[x,y] for x ,y, in zip(x_green,y_green)]
+    auxiliary += [0]*len(x_green)
+
+    return candidates, auxiliary
 
 
 def show_image_and_gt(image, objs, fig_num=None):
@@ -99,7 +102,7 @@ def test_find_tfl_lights(image_path, json_path=None, fig_num=None):
         gt_data = json.load(open(json_path))
         what = ['traffic light']
         objects = [o for o in gt_data['objects'] if o['label'] in what]
-    # show_image_and_gt(image, objects, fig_num)
+    show_image_and_gt(image, objects, fig_num)
     red_x, red_y, green_x, green_y = find_tfl_lights(image, some_threshold=42)
     plt.plot(red_x, red_y, 'ro', color='r', markersize=4)
     plt.plot(green_x, green_y, 'ro', color='g', markersize=4)
@@ -126,6 +129,6 @@ def main(argv=None):
         print("Bad configuration?? Didn't find any picture to show")
     plt.show(block=True)
 
-
-if __name__ == '__main__':
-    main()
+#
+# if __name__ == '__main__':
+#     main()
