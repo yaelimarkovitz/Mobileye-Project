@@ -7,10 +7,10 @@ import zipfile
 import glob
 
 
-def open_zipfile():
-    set_ = zipfile.ZipFile('C:/Users/RENT/Desktop/sets/gtFine_trainvaltest.zip', 'r')
+def open_zipfile(labals_path, pictuers_path):
+    set_ = zipfile.ZipFile(labals_path, 'r')
     set_.extractall(path="labels/")
-    set_ = zipfile.ZipFile('C:/Users/RENT/Desktop/sets/leftImg8bit_trainvaltest.zip', 'r')
+    set_ = zipfile.ZipFile(pictuers_path, 'r')
     set_.extractall(path="pic/")
 
 
@@ -50,7 +50,6 @@ def crop_image(path, x, y):
     im = Image.open(path)
     im = im.crop((x, y, x + 81, y + 81))
     croped_image = np.asarray(im, dtype='uint8')
-    # print("start" + str(croped_image.shape) + "end")
     return croped_image
 
 
@@ -86,19 +85,21 @@ def build_trainset(set_):
 
 
 def check_dataset(file, index):
-    im = crop_image('pic/leftImg8bit/train/aachen/aachen_000002_000019_leftImg8bit.png',0,0)
+    im = crop_image('pic/leftImg8bit/train/aachen/aachen_000002_000019_leftImg8bit.png', 0, 0)
     size = bytearray(im)
-    image = np.memmap('Data_dir/train/data.bin', dtype='uint8', mode='r', offset=index*len(size),shape=(81,81,3))
+    image = np.memmap('../Data_dir/train/data.bin', dtype='uint8', mode='r', offset=index * len(size), shape=(81, 81, 3))
     plt.imshow(image)
     plt.show()
-    flag = np.memmap('Data_dir/train/labels.bin',dtype='uint8',mode='r',offset=index*1,shape=(1))
+    flag = np.memmap('../Data_dir/train/labels.bin', dtype='uint8', mode='r', offset=index * 1, shape=(1))
     print(flag)
 
+
 def main():
-    # open_zipfile()
-    # build_trainset('train')
-    # build_trainset('val')
-    check_dataset('Data_dir/train/data.bin',190)
+    open_zipfile('C:/Users/RENT/Desktop/sets/gtFine_trainvaltest.zip',
+                 'C:/Users/RENT/Desktop/sets/leftImg8bit_trainvaltest.zip')
+    build_trainset('train')
+    build_trainset('val')
+    check_dataset('../Data_dir/train/data.bin', 190)
 
 
 if __name__ == '__main__':

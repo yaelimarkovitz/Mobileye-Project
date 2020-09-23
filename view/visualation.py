@@ -1,4 +1,4 @@
-from candidates import Candidates
+from model.candidates import Candidates
 from matplotlib import pyplot as plt
 
 
@@ -7,6 +7,7 @@ def visual(candidates_lights: Candidates, candidates_tfl: Candidates, distances,
         green_x, green_y, red_x, red_y = separate_by_color(candidates_lights)
         im_lights = plt.imread(candidates_lights.frame_path)
         fig, (lights_sec, tfl_sec, distance_sec) = plt.subplots(1, 3, figsize=(12, 6))
+        fig.suptitle(f'frame: {candidates_tfl.frame_path}')
         lights_sec.set_title('candidates')
         lights_sec.imshow(im_lights)
         lights_sec.plot(red_x, red_y, 'ro', color='r', markersize=4)

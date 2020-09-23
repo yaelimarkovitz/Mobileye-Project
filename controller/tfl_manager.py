@@ -4,11 +4,11 @@ import numpy as np
 from PIL import Image
 from tensorflow.keras.models import load_model
 
-from candidates import Candidates
-from find_lights import find_tfl_lights
-from create_data_set import crop_image
-from SFM import calc_TFL_dist, get_foe_rotate
-from visualation import visual
+from model.candidates import Candidates
+from model.find_lights import find_tfl_lights
+from initialization.create_data_set import crop_image
+from model.calc_distance import calc_TFL_dist, get_foe_rotate
+from view.visualation import visual
 
 
 class FrameContainer(object):
@@ -20,6 +20,7 @@ class FrameContainer(object):
         self.corresponding_ind = []
         self.valid = []
 
+#TODO merge the frame_conteiner with the candidates
 
 @dataclass
 class TflManager:
@@ -27,18 +28,17 @@ class TflManager:
         self.principle_point = pp
         self.focal = focal
         self.em = egomotion
-        self.my_model = load_model("model.h5")
+        self.my_model = load_model("./model.h5")
         self.prev_candidates = Candidates("", [], [])
 
     def on_frame(self, frame_path, index):
         lights_candidates, tfl_candidates = self.find_tfl(frame_path)
 
         if index == 0:
-            visual(lights_candidates, tfl_candidates, 0, 0, 0)
+            distances , rot_pts ,foe =0,0,0
         else:
             distances, foe, rot_pts = self.calc_distance(tfl_candidates, index)
-            visual(lights_candidates, tfl_candidates, distances, rot_pts, foe)
-
+        visual(lights_candidates, tfl_candidates, distances, rot_pts, foe)
         self.prev_candidates = tfl_candidates
 
     def find_tfl(self, frame_path):
