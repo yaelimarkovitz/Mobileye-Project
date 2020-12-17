@@ -1,4 +1,4 @@
-from model.candidates import Candidates
+from candidates import Candidates
 from matplotlib import pyplot as plt
 
 

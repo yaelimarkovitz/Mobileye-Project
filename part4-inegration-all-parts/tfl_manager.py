@@ -4,10 +4,10 @@ import numpy as np
 from PIL import Image
 from tensorflow.keras.models import load_model
 
-from model.candidates import Candidates
-from model.find_lights import find_tfl_lights
-from initialization.create_data_set import crop_image
-from model.calc_distance import calc_TFL_dist, get_foe_rotate
+from candidates import Candidates
+from part1-find-lights.find_lights import find_tfl_lights
+from part2-training-CNN.create_data_set import crop_image
+from part3-calc-distance-tfl.calc_distance import calc_TFL_dist, get_foe_rotate
 from view.visualation import visual
 
 
@@ -28,7 +28,7 @@ class TflManager:
         self.principle_point = pp
         self.focal = focal
         self.em = egomotion
-        self.my_model = load_model("./model.h5")
+        self.my_model = load_model("./part2-training-CNN/model.h5")
         self.prev_candidates = Candidates("", [], [])
 
     def on_frame(self, frame_path, index):

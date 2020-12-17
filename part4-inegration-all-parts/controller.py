@@ -1,5 +1,5 @@
 import pickle
-from controller.tfl_manager import TflManager
+from tfl_manager import TflManager
 
 
 class Controller:
